@@ -29,14 +29,17 @@ function App() {
           <Route path="/newUser">
             <NewUser />
           </Route>
-          <Route path="/products">
+          <Route path="/shops">
             <ProductList />
           </Route>
-          <Route path="/product/:productId">
+          <Route path="/shop/:productId">
             <Product />
           </Route>
           <Route path="/newproduct">
             <NewProduct />
+          </Route>
+          <Route path="/shipment">
+            <UserList />
           </Route>
         </Switch>
       </div>

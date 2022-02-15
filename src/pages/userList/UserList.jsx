@@ -1,17 +1,19 @@
-import "./userList.css";
+import { IconButton } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
-import { userRows } from "../../dummyData";
-import { Link } from "react-router-dom";
+import EditIcon from "@material-ui/icons/Edit";
 import { useState } from "react";
-
+import { useHistory } from "react-router-dom";
+import { userRows } from "../../dummyData";
+import "./userList.css";
 export default function UserList() {
+  const history = useHistory();
   const [data, setData] = useState(userRows);
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
   };
-  
+
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
     {
@@ -41,17 +43,20 @@ export default function UserList() {
     {
       field: "action",
       headerName: "Action",
+      type: "boolean",
       width: 150,
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/user/" + params.row.id}>
-              <button className="userListEdit">Edit</button>
-            </Link>
-            <DeleteOutline
-              className="userListDelete"
-              onClick={() => handleDelete(params.row.id)}
-            />
+            <IconButton onClick={() => history.push(`/user/${params.row.id}`)}>
+              <EditIcon className="userListEdit" />
+            </IconButton>
+            <IconButton>
+              <DeleteOutline
+                className="userListDelete"
+                onClick={() => handleDelete(params.row.id)}
+              />
+            </IconButton>
           </>
         );
       },

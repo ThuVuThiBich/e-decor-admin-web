@@ -1,11 +1,14 @@
-import "./productList.css";
+import { IconButton } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
-import { productRows } from "../../dummyData";
-import { Link } from "react-router-dom";
+import EditIcon from "@material-ui/icons/Edit";
 import { useState } from "react";
-
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { productRows } from "../../dummyData";
+import "./productList.css";
 export default function ProductList() {
+  const history = useHistory();
+
   const [data, setData] = useState(productRows);
 
   const handleDelete = (id) => {
@@ -41,17 +44,21 @@ export default function ProductList() {
     {
       field: "action",
       headerName: "Action",
+      type: "boolean",
+
       width: 150,
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/product/" + params.row.id}>
-              <button className="productListEdit">Edit</button>
-            </Link>
-            <DeleteOutline
-              className="productListDelete"
-              onClick={() => handleDelete(params.row.id)}
-            />
+            <IconButton onClick={() => history.push(`/shop/${params.row.id}`)}>
+              <EditIcon className="userListEdit" />
+            </IconButton>
+            <IconButton>
+              <DeleteOutline
+                className="userListDelete"
+                onClick={() => handleDelete(params.row.id)}
+              />
+            </IconButton>
           </>
         );
       },
