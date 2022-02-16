@@ -31,7 +31,8 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  border-radius: 10px;
+  text-decoration: none;
+  color: black;
 }
 
 .sidebarListItem.active,

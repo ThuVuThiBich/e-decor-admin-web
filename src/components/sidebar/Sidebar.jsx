@@ -1,20 +1,20 @@
-import "./sidebar.css";
 import {
-  LineStyle,
-  Timeline,
-  TrendingUp,
-  PermIdentity,
-  Storefront,
   AttachMoney,
   BarChart,
-  MailOutline,
-  DynamicFeed,
   ChatBubbleOutline,
-  WorkOutline,
-  Report,
+  DynamicFeed,
+  LineStyle,
   LocalShippingOutlined,
+  MailOutline,
+  PermIdentity,
+  Report,
+  Storefront,
+  Timeline,
+  TrendingUp,
+  WorkOutline,
 } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import "./sidebar.css";
 
 export default function Sidebar() {
   return (
@@ -23,13 +23,16 @@ export default function Sidebar() {
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Dashboard</h3>
           <ul className="sidebarList">
-            <Link to="/" className="link">
-              <li className="sidebarListItem active">
-                <LineStyle className="sidebarIcon" />
-                Home
-              </li>
-            </Link>
-            <li className="sidebarListItem">
+            <NavLink
+              className={"sidebarListItem"}
+              to="/"
+              activeClassName={"active"}
+            >
+              <LineStyle className="sidebarIcon" />
+              Home
+            </NavLink>
+
+            <li className="sidebarListItem ">
               <Timeline className="sidebarIcon" />
               Analytics
             </li>
@@ -37,29 +40,37 @@ export default function Sidebar() {
               <TrendingUp className="sidebarIcon" />
               Sales
             </li>
-            <Link to="/shipment" className="link">
-              <li className="sidebarListItem">
-                <LocalShippingOutlined className="sidebarIcon" />
-                Shipment
-              </li>
-            </Link>
+
+            <NavLink
+              className={"sidebarListItem"}
+              to="/shipment"
+              activeClassName={"active"}
+            >
+              <LocalShippingOutlined className="sidebarIcon" />
+              Shipment
+            </NavLink>
           </ul>
         </div>
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Quick Menu</h3>
           <ul className="sidebarList">
-            <Link to="/users" className="link">
-              <li className="sidebarListItem">
-                <PermIdentity className="sidebarIcon" />
-                Users
-              </li>
-            </Link>
-            <Link to="/shops" className="link">
-              <li className="sidebarListItem">
-                <Storefront className="sidebarIcon" />
-                Shops
-              </li>
-            </Link>
+            <NavLink
+              className={"sidebarListItem"}
+              to="/users"
+              activeClassName={"active"}
+            >
+              <PermIdentity className="sidebarIcon" />
+              Users
+            </NavLink>
+            <NavLink
+              className={"sidebarListItem"}
+              to="/shops"
+              activeClassName={"active"}
+            >
+              <Storefront className="sidebarIcon" />
+              Shops
+            </NavLink>
+
             <li className="sidebarListItem">
               <AttachMoney className="sidebarIcon" />
               Transactions
