@@ -2,15 +2,16 @@ import { Box, Container } from "@material-ui/core";
 import Sidebar from "components/sidebar/Sidebar";
 import Topbar from "components/topbar/Topbar";
 import Home from "pages/home/Home";
-import NewProduct from "pages/newProduct/NewProduct";
+import NewProduct from "pages/newShop/NewShop";
 import NewUser from "pages/newUser/NewUser";
-import Product from "pages/product/Product";
-import ProductList from "pages/productList/ProductList";
+import Shop from "pages/shop/Shop";
 import ShipmentList from "pages/shipmentList/shipmentList";
+import TransactionList from "pages/transactionList/transactionList";
 import User from "pages/user/User";
-import UserList from "pages/userList/UserList";
+import UserList from "pages/userList/userList";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+import ShopList from "pages/shopList/shopList";
 
 const Main = () => {
   return (
@@ -33,20 +34,24 @@ const Main = () => {
             <NewUser />
           </Route>
           <Route path="/shops" exact>
-            <ProductList />
+            <ShopList />
           </Route>
           <Route path="/shop/:productId">
-            <Product />
+            <Shop />
           </Route>
-          <Route path="/new-product">
+          <Route path="/new-shop">
             <NewProduct />
           </Route>
-          <Route path="/shipment" exact>
+          <Route path="/shipments" exact>
             <ShipmentList />
           </Route>
-          
-          <Route path={`/shipment/:id`} exact>
+
+          <Route path={`/shipments/:id`} exact>
             <ShipmentList />
+          </Route>
+
+          <Route path="/transactions" exact>
+            <TransactionList />
           </Route>
           <Redirect from="/" to="/home" />
         </Switch>

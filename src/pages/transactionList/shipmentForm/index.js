@@ -48,7 +48,7 @@ export default function ShipmentForm(props) {
     } else {
       dispatch(updateShipment({ id, shipment }));
     }
-    history.push("/shipments");
+    history.push("/shipment");
   };
   return (
     <Paper>

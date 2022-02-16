@@ -12,7 +12,13 @@ import {
   Tooltip,
   Typography,
 } from "@material-ui/core";
-import { Add, Delete, Edit, LocalShipping } from "@material-ui/icons";
+import {
+  Add,
+  Delete,
+  Edit,
+  LocalShipping,
+  AttachMoney,
+} from "@material-ui/icons";
 import { LoadingTable } from "components/Common/LoadingTable";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,10 +28,10 @@ import { ToastContainer } from "react-toastify";
 import { shipmentSelector } from "redux/selectors";
 import { deleteShipment, getShipments } from "redux/shipmentRedux";
 import ShipmentForm from "./shipmentForm";
-import "./shipmentList.css";
+import "./transactionList.css";
 import { useStyles } from "./styles";
 
-export default function ShipmentList() {
+export default function TransactionList() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { id } = useParams();
@@ -46,24 +52,17 @@ export default function ShipmentList() {
         mb={2}
       >
         <Box display="flex" alignItems="center">
-          <LocalShipping className={classes.icon} />
-          <Typography className={classes.title}>Shipments</Typography>
+          <AttachMoney className={classes.icon} />
+          <Typography className={classes.title}>Transactions</Typography>
         </Box>
         <Button
           color="primary"
           variant="outlined"
           onClick={() => {
-            id ? history.push("/shipments") : history.push("/shipments/add");
+            id ? history.push("/shipment") : history.push("/shipment/add");
           }}
         >
-          {id ? (
-            "Back To Shipments List"
-          ) : (
-            <>
-              <Add />
-              New Shipment
-            </>
-          )}
+          {id ? "Back To Shipments List" : "Report"}
         </Button>
       </Box>
       <Box my={2} mb={4}>
@@ -74,17 +73,18 @@ export default function ShipmentList() {
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell style={{ fontWeight: 600 }}>
-                    Shipment's Name
+                  <TableCell style={{ fontWeight: 600 }}>Shop's Name</TableCell>
+                  <TableCell style={{ fontWeight: 600 }} align="center">
+                    Transaction's Name
                   </TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
-                    Working Time
+                    Amount
                   </TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
-                    Fee
+                    Date
                   </TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
-                    Max Order Value
+                    Status
                   </TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
                     Actions
@@ -92,8 +92,8 @@ export default function ShipmentList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {isLoading ? (
-                  <LoadingTable colsNumber={5} />
+                {true ? (
+                  <LoadingTable colsNumber={6} />
                 ) : (
                   shipments.map((row, index) => (
                     <TableRow key={index}>
@@ -112,7 +112,7 @@ export default function ShipmentList() {
                           <IconButton
                             aria-label="edit"
                             onClick={() => {
-                              history.push(`shipments/${row?.id}`);
+                              history.push(`shipment/${row?.id}`);
                             }}
                           >
                             <Edit />

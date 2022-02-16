@@ -43,11 +43,11 @@ export default function Sidebar() {
 
             <NavLink
               className={"sidebarListItem"}
-              to="/shipment"
+              to="/shipments"
               activeClassName={"active"}
             >
               <LocalShippingOutlined className="sidebarIcon" />
-              Shipment
+              Shipments
             </NavLink>
           </ul>
         </div>
@@ -70,11 +70,15 @@ export default function Sidebar() {
               <Storefront className="sidebarIcon" />
               Shops
             </NavLink>
-
-            <li className="sidebarListItem">
+            <NavLink
+              className={"sidebarListItem"}
+              to="/transactions"
+              activeClassName={"active"}
+            >
               <AttachMoney className="sidebarIcon" />
               Transactions
-            </li>
+            </NavLink>
+
             <li className="sidebarListItem">
               <BarChart className="sidebarIcon" />
               Reports
