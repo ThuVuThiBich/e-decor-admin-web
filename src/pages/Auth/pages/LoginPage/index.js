@@ -1,13 +1,11 @@
-import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
+import { Box, makeStyles, Typography } from "@material-ui/core";
 import { unwrapResult } from "@reduxjs/toolkit";
-import Icons from "constants/icons";
-import { login } from "pages/Auth/userSlice";
 import { useSnackbar } from "notistack";
 import AuthForm from "pages/Auth/components/AuthForm";
+import { login } from "pages/Auth/userSlice";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import loginImg from "assets/images/login.svg";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -18,10 +16,13 @@ const useStyles = makeStyles((theme) => ({
   },
 
   form: {
-    maxWidth: "30rem",
+    maxWidth: "25rem",
     padding: theme.spacing(7, 7, 4),
     border: "1px solid #BDBDBD",
     borderRadius: "1rem",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
 
   title: {
@@ -45,7 +46,7 @@ const LoginPage = () => {
       unwrapResult(resultAction);
 
       enqueueSnackbar("Logged in successfully 🎉🎉", { variant: "success" });
-      history.push("/account");
+      history.push("/home");
     } catch (err) {
       console.log(err);
       enqueueSnackbar("Login failed", { variant: "error" });
@@ -55,8 +56,9 @@ const LoginPage = () => {
   return (
     <Box className={classes.root}>
       <Box className={classes.form}>
-        <img src={Icons.DEV_ICON} alt="" />
-
+        <Typography component="h1" variant="h4">
+          E-Decor
+        </Typography>
         <Typography variant="h6" component="h1" className={classes.title}>
           Login
         </Typography>

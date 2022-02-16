@@ -5,8 +5,7 @@ export const login = createAsyncThunk("user/login", async (payload) => {
   const data = await userApi.login(payload);
 
   //   save data to local storage
-  localStorage.setItem("user", JSON.stringify(data.user));
-  localStorage.setItem("access_token", data.jwt);
+  localStorage.setItem("access_token", data.token);
 
   return data.user;
 });
@@ -50,8 +49,7 @@ export const userSlice = createSlice({
   reducers: {
     logout: (state) => {
       // clear local storage
-      localStorage.removeItem("user");
-      localStorage.removeItem("access_token");
+      localStorage.clear();
 
       state.current = {};
     },

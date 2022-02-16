@@ -3,8 +3,15 @@ import { NotificationsNone, Settings } from "@material-ui/icons";
 import React from "react";
 import "./topbar.css";
 import Icons from "constants/icons";
+import { logout } from "pages/Auth/userSlice";
+import { useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function Topbar() {
+  const { enqueueSnackbar } = useSnackbar();
+  const history = useHistory();
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -16,6 +23,17 @@ export default function Topbar() {
 
   const isLoggedIn = Boolean(localStorage.getItem("access_token"));
 
+  const handleLogoutClick = () => {
+    localStorage.clear();
+    const action = logout();
+    dispatch(action);
+
+    enqueueSnackbar("See you again 👋👋", {
+      variant: "info",
+    });
+
+    history.push("/");
+  };
   return (
     <div className="topbar">
       <div className="topbarWrapper">
@@ -41,7 +59,7 @@ export default function Topbar() {
               <Settings />
             </div>
             <img
-              src="https://images.pexels.com/photos/1526814/pexels-photo-1526814.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+              src="https://res.cloudinary.com/e-decor/image/upload/v1643338393/uploads/asqpu8io4nkw074gsiaf.png"
               alt=""
               className="topAvatar"
               aria-controls="simple-menu"
@@ -64,7 +82,7 @@ export default function Topbar() {
               disableScrollLock={true}
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
+              <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
             </Menu>
           </div>
         )}

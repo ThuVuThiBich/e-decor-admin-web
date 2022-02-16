@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Avatar, Button, makeStyles } from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
 import InputFieldWithIcon from "components/FormFields/InputFieldWithIcon";
-import Icons from "constants/icons";
 import PropTypes from "prop-types";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -84,18 +83,9 @@ const AuthForm = ({ isLogin, onSubmit }) => {
           disableElevation
           disabled={isSubmitting}
         >
-          {isLogin ? "Login" : "Start coding now"}
+          {isLogin ? "Login" : "Register"}
         </Button>
       </form>
-
-      <p className={classes.paragraph}>or continue with these social profile</p>
-
-      <div className={classes.social}>
-        <Avatar alt="" src={Icons.FACEBOOK_ICON} />
-        <Avatar alt="" src={Icons.GITHUB_ICON} />
-        <Avatar alt="" src={Icons.GOOGLE_ICON} />
-        <Avatar alt="" src={Icons.TWITTER_ICON} />
-      </div>
 
       {!isLogin && (
         <p className={classes.paragraph}>

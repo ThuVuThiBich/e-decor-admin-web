@@ -25,7 +25,7 @@ export default function Sidebar() {
           <ul className="sidebarList">
             <NavLink
               className={"sidebarListItem"}
-              to="/"
+              to="/home"
               activeClassName={"active"}
             >
               <LineStyle className="sidebarIcon" />

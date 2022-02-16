@@ -7,7 +7,7 @@ const AuthRoute = (props) => {
   // Otherwise, show route
 
   const isLoggedIn = Boolean(localStorage.getItem("access_token"));
-  if (isLoggedIn) return <Redirect to='/account' />;
+  if (isLoggedIn) return <Redirect to='/' />;
 
   return <Route {...props} />;
 };
