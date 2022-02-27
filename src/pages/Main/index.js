@@ -36,7 +36,7 @@ const Main = () => {
           <Route path="/shops" exact>
             <ShopList />
           </Route>
-          <Route path="/shop/:productId">
+          <Route path="/shop/:shopId">
             <Shop />
           </Route>
           <Route path="/new-shop">

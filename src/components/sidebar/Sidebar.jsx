@@ -3,7 +3,6 @@ import {
   BarChart,
   ChatBubbleOutline,
   DynamicFeed,
-  LineStyle,
   LocalShippingOutlined,
   MailOutline,
   PermIdentity,
@@ -13,6 +12,7 @@ import {
   TrendingUp,
   WorkOutline,
 } from "@material-ui/icons";
+import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import { NavLink } from "react-router-dom";
 import "./sidebar.css";
 
@@ -21,14 +21,14 @@ export default function Sidebar() {
     <div className="sidebar">
       <div className="sidebarWrapper">
         <div className="sidebarMenu">
-          <h3 className="sidebarTitle">Dashboard</h3>
+          <h3 className="sidebarTitle">Home</h3>
           <ul className="sidebarList">
             <NavLink
               className={"sidebarListItem"}
               to="/home"
               activeClassName={"active"}
             >
-              <LineStyle className="sidebarIcon" />
+              <HomeOutlinedIcon className="sidebarIcon" />
               Home
             </NavLink>
 

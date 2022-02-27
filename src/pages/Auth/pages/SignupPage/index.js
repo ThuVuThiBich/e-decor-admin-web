@@ -3,7 +3,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
 import AuthForm from "pages/Auth/components/AuthForm";
 import NameForm from "pages/Auth/components/NameForm";
-import { register, updateAccount } from "pages/Auth/userSlice";
+import { register, updateAccount } from "pages/Auth/authSlice";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -23,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "1rem",
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: "white",
   },
 
   title: {

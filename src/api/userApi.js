@@ -1,23 +1,39 @@
 import axiosClient from "./axiosClient";
 
 const userApi = {
-  login: (data) => {
-    const url = "/auth/login";
+  getAll: () => {
+    const url = `/admin/users`;
+    return axiosClient.get(url);
+  },
+
+  get: (id) => {
+    const url = `/admin/${id}`;
+    return axiosClient.get(url);
+  },
+
+  create: (data) => {
+    const url = `/admin`;
     return axiosClient.post(url, data);
   },
 
-  register: (data) => {
-    const url = "/auth/register";
-    return axiosClient.post(url, data);
+  update: (id, data) => {
+    const url = `/admin/${id}`;
+    return axiosClient.put(url, data);
   },
 
-  updateAccount: (data, userId) => {
-    const url = `/users/${userId}`;
-    return axiosClient.patch(url, data);
+  delete: (id) => {
+    const url = `/admin/user/${id}`;
+    return axiosClient.delete(url);
   },
 
-  getUser: (id) => {
-    const url = `/users/${id}`;
+  // delete: (id) => {
+  //   const url = `/admin/user/${id}`;
+  //   return axiosClient.delete(url);
+  // },
+
+  //
+  getShops: () => {
+    const url = `/admin/shops`;
     return axiosClient.get(url);
   },
 };

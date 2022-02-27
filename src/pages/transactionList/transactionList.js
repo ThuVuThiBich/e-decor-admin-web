@@ -12,13 +12,7 @@ import {
   Tooltip,
   Typography,
 } from "@material-ui/core";
-import {
-  Add,
-  Delete,
-  Edit,
-  LocalShipping,
-  AttachMoney,
-} from "@material-ui/icons";
+import { AttachMoney, Delete, Edit } from "@material-ui/icons";
 import { LoadingTable } from "components/Common/LoadingTable";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,15 +22,15 @@ import { ToastContainer } from "react-toastify";
 import { shipmentSelector } from "redux/selectors";
 import { deleteShipment, getShipments } from "redux/shipmentRedux";
 import ShipmentForm from "./shipmentForm";
-import "./transactionList.css";
 import { useStyles } from "./styles";
+import "./transactionList.css";
 
 export default function TransactionList() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { id } = useParams();
   const classes = useStyles();
-  const { isLoading, shipments, isUpdating } = useSelector(shipmentSelector);
+  const { shipments, isUpdating } = useSelector(shipmentSelector);
 
   useEffect(() => {
     dispatch(getShipments());

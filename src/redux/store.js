@@ -1,10 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "pages/Auth/userSlice";
+import authReducer from "pages/Auth/authSlice";
 import shipmentReducer from "./shipmentRedux";
+import statisticReducer from "./statisticRedux";
+import userReducer from "./userRedux";
 
 export default configureStore({
   reducer: {
-    user: userReducer,
+    auth: authReducer,
     shipment: shipmentReducer,
+    statistic: statisticReducer,
+    user: userReducer,
   },
 });

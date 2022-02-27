@@ -2,7 +2,7 @@ import { Box, makeStyles, Typography } from "@material-ui/core";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
 import AuthForm from "pages/Auth/components/AuthForm";
-import { login } from "pages/Auth/userSlice";
+import { login } from "pages/Auth/authSlice";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    backgroundColor: "white"
   },
 
   title: {

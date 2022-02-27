@@ -30,7 +30,7 @@ export default function UserList() {
   const history = useHistory();
   const { id } = useParams();
   const classes = useStyles();
-  const { isLoading, shipments, isUpdating } = useSelector(shipmentSelector);
+  const { shipments, isUpdating } = useSelector(shipmentSelector);
 
   useEffect(() => {
     dispatch(getShipments());

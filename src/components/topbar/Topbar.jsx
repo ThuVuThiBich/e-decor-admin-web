@@ -3,7 +3,7 @@ import { NotificationsNone, Settings } from "@material-ui/icons";
 import React from "react";
 import "./topbar.css";
 import Icons from "constants/icons";
-import { logout } from "pages/Auth/userSlice";
+import { logout } from "pages/Auth/authSlice";
 import { useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
