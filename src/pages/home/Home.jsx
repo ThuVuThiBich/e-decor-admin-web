@@ -12,16 +12,23 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import HomeIcon from "@material-ui/icons/Home";
 import {
+  addMonths,
+  addYears,
+  endOfISOWeek,
   endOfMonth,
-  endOfWeek,
   endOfYear,
   format,
+  getDay,
+  nextDay,
+  previousDay,
+  startOfISOWeek,
   startOfMonth,
-  startOfWeek,
   startOfYear,
+  subMonths,
+  subYears,
 } from "date-fns";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { statisticSelector } from "redux/selectors";
 import Chart from "../../components/chart/Chart";
 import FeaturedInfo from "../../components/featuredInfo/FeaturedInfo";
@@ -37,32 +44,30 @@ export const VIEWS = [
 export default function Home() {
   const classes = useStyles();
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [userData, setUserData] = useState([]);
+  const [date, setDate] = useState(new Date());
+
   // setUserData([])
   const [view, setView] = useState("week");
-  const [startDate, setStartDate] = useState(
-    startOfWeek(new Date(), { weekStartsOn: 1 })
-  );
-  const [endDate, setEndDate] = useState(
-    endOfWeek(new Date(), { weekStartsOn: 1 })
-  );
+  const [startDate, setStartDate] = useState(startOfISOWeek(new Date()));
+  const [endDate, setEndDate] = useState(endOfISOWeek(new Date()));
   const statisticStore = useSelector(statisticSelector);
   console.log(statisticStore);
   useEffect(() => {
     if (view === "week") {
-      setStartDate(startOfWeek(new Date(), { weekStartsOn: 1 }));
-      setEndDate(endOfWeek(new Date(), { weekStartsOn: 1 }));
+      setStartDate(startOfISOWeek(date));
+      setEndDate(endOfISOWeek(date));
     }
     if (view === "month") {
-      setStartDate(startOfMonth(new Date()));
-      setEndDate(endOfMonth(new Date()));
+      setStartDate(startOfMonth(date));
+      setEndDate(endOfMonth(date));
     }
     if (view === "year") {
-      setStartDate(startOfYear(new Date()));
-      setEndDate(endOfYear(new Date()));
+      setStartDate(startOfYear(date));
+      setEndDate(endOfYear(date));
     }
-  }, [view]);
+  }, [date, view]);
 
   useEffect(() => {
     // dispatch(
@@ -97,7 +102,15 @@ export default function Home() {
           <Box className={classes.actionBox}>
             <IconButton
               className={`fas fa-angle-left ${classes.moveIcon}`}
-              onClick={() => {}}
+              onClick={() => {
+                setDate(
+                  view === "week"
+                    ? previousDay(date, getDay(date))
+                    : view === "month"
+                    ? subMonths(date, 1)
+                    : subYears(date, 1)
+                );
+              }}
             >
               <ChevronLeftIcon />
             </IconButton>
@@ -110,7 +123,15 @@ export default function Home() {
 
             <IconButton
               className={`fas fa-angle-right ${classes.moveIcon}`}
-              onClick={() => {}}
+              onClick={() => {
+                setDate(
+                  view === "week"
+                    ? nextDay(date, getDay(date))
+                    : view === "month"
+                    ? addMonths(date, 1)
+                    : addYears(date, 1)
+                );
+              }}
             >
               <ChevronRightIcon />
             </IconButton>
