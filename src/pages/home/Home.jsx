@@ -28,8 +28,9 @@ import {
   subYears,
 } from "date-fns";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { statisticSelector } from "redux/selectors";
+import { getStatisticsUsers } from "redux/statisticRedux";
 import Chart from "../../components/chart/Chart";
 import FeaturedInfo from "../../components/featuredInfo/FeaturedInfo";
 import WidgetLg from "../../components/widgetLg/WidgetLg";
@@ -41,10 +42,24 @@ export const VIEWS = [
   { label: "Month", value: "month" },
   { label: "Year", value: "year" },
 ];
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 export default function Home() {
   const classes = useStyles();
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [userData, setUserData] = useState([]);
   const [date, setDate] = useState(new Date());
 
@@ -70,21 +85,30 @@ export default function Home() {
   }, [date, view]);
 
   useEffect(() => {
-    // dispatch(
-    //   getStatistics({
-    //     startDate: new Date(startDate).toISOString(),
-    //     endDate: new Date(endDate).toISOString(),
-    //   })
-    // );
+    dispatch(
+      getStatisticsUsers({
+        startDate: new Date(startDate).toISOString(),
+        endDate: new Date(endDate).toISOString(),
+      })
+    ).then((data) => {
+      console.log(data);
+      setUserData(
+        view === "year"
+          ? data.payload.map((item, index) => ({
+              ...item,
+              name: MONTHS[index],
+            }))
+          : data.payload
+      );
+    });
     // dispatch(
     //   getChart({
     //     startDate: new Date(startDate).toISOString(),
     //     endDate: new Date(endDate).toISOString(),
     //   })
     // );
-    setUserData([]);
     // setUserData
-  }, []);
+  }, [dispatch, endDate, startDate, view]);
   return (
     <div className="home">
       <Box
