@@ -1,34 +1,59 @@
+import { useSelector } from "react-redux";
+import { statisticSelector } from "redux/selectors";
 import "./widgetLg.css";
 
 export default function WidgetLg() {
   const Button = ({ type }) => {
     return <button className={"widgetLgButton " + type}>{type}</button>;
   };
+  const { transactions } = useSelector(statisticSelector);
+
   return (
     <div className="widgetLg">
       <h3 className="widgetLgTitle">Latest transactions</h3>
       <table className="widgetLgTable">
         <tr className="widgetLgTr">
           <th className="widgetLgTh">Customer</th>
-          <th className="widgetLgTh">Date</th>
-          <th className="widgetLgTh">Amount</th>
-          <th className="widgetLgTh">Status</th>
+          <th className="widgetLgTh" style={{ textAlign: "center" }}>
+            Date
+          </th>
+          <th className="widgetLgTh" style={{ textAlign: "center" }}>
+            Amount
+          </th>
+          <th className="widgetLgTh" style={{ textAlign: "center" }}>
+            Service Fee
+          </th>
+          <th className="widgetLgTh" style={{ textAlign: "center" }}>
+            Status
+          </th>
         </tr>
-        <tr className="widgetLgTr">
-          <td className="widgetLgUser">
-            <img
-              src="https://images.pexels.com/photos/4172933/pexels-photo-4172933.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-              alt=""
-              className="widgetLgImg"
-            />
-            <span className="widgetLgName">Susan Carol</span>
-          </td>
-          <td className="widgetLgDate">2 Jun 2021</td>
-          <td className="widgetLgAmount">$122.00</td>
-          <td className="widgetLgStatus">
-            <Button type="Approved" />
-          </td>
-        </tr>
+        {transactions?.map((item, index) => (
+          <tr className="widgetLgTr" key={index}>
+            <td className="widgetLgUser">
+              <img src={item.shop.avatar} alt="" className="widgetLgImg" />
+              <span className="widgetLgName">{item.shop.name}</span>
+            </td>
+            <td className="widgetLgDate" style={{ textAlign: "center" }}>
+              {new Date(item?.transaction?.createdAt).toLocaleDateString(
+                "en-us",
+                {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                }
+              )}
+            </td>
+            <td className="widgetLgAmount" style={{ textAlign: "center" }}>
+              ${item?.amount}
+            </td>
+            <td className="widgetLgAmount" style={{ textAlign: "center" }}>
+              ${(item?.amount * item?.serviceFeePercentage).toFixed(1)}
+            </td>
+            <td className="widgetLgStatus" style={{ textAlign: "center" }}>
+              <Button type={item?.transaction?.status} />
+            </td>
+          </tr>
+        ))}
       </table>
     </div>
   );

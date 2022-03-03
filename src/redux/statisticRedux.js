@@ -8,10 +8,10 @@ export const getStatisticsUsers = createAsyncThunk(
     return response.result;
   }
 );
-export const getChart = createAsyncThunk(
-  "statistic/getChart",
+export const getTransactions = createAsyncThunk(
+  "statistic/getTransactions",
   async (data, thunkAPI) => {
-    const response = await statisticApi.getChart(data);
+    const response = await statisticApi.getTransactions(data);
     return response.result;
   }
 );
@@ -19,10 +19,9 @@ export const getChart = createAsyncThunk(
 const statisticsSlice = createSlice({
   name: "statistic",
   initialState: {
-    earning: 0,
-    productSold: 0,
-    pendingOrders: 0,
-    chart: {},
+    transactions: [],
+    totalTransactions: 0,
+    currentPage: 1,
     isLoading: false,
     isUpdating: false,
     error: false,
@@ -40,16 +39,18 @@ const statisticsSlice = createSlice({
       state.isLoading = false;
     },
 
-    [getChart.pending]: (state) => {
+    [getTransactions.pending]: (state) => {
       state.isLoading = true;
     },
-    [getChart.rejected]: (state, action) => {
+    [getTransactions.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     },
-    [getChart.fulfilled]: (state, action) => {
+    [getTransactions.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.chart = action.payload;
+      state.transactions = action.payload.transactions;
+      state.totalTransactions = action.payload.totalTransactions;
+      state.currentPage = action.payload.currentPage;
     },
   },
 });

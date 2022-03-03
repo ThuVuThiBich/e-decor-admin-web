@@ -5,8 +5,8 @@ const statisticApi = {
     const url = `/admin/users/statistics`;
     return axiosClient.get(url, { params });
   },
-  getChart: (params) => {
-    const url = `/dashboard/earnings`;
+  getTransactions: (params) => {
+    const url = `/admin/transactions`;
     return axiosClient.get(url, { params });
   },
 };

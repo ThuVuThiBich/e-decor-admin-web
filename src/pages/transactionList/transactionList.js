@@ -1,6 +1,8 @@
 import {
+  Avatar,
   Box,
   Button,
+  Chip,
   IconButton,
   Paper,
   Table,
@@ -10,18 +12,19 @@ import {
   TableHead,
   TableRow,
   Tooltip,
-  Typography,
+  Typography
 } from "@material-ui/core";
-import { AttachMoney, Delete, Edit } from "@material-ui/icons";
+import { AttachMoney } from "@material-ui/icons";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import { Pagination } from "@material-ui/lab";
 import { LoadingTable } from "components/Common/LoadingTable";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { ToastContainer } from "react-toastify";
-import { shipmentSelector } from "redux/selectors";
-import { deleteShipment, getShipments } from "redux/shipmentRedux";
-import ShipmentForm from "./shipmentForm";
+import { statisticSelector } from "redux/selectors";
+import { getTransactions } from "redux/statisticRedux";
 import { useStyles } from "./styles";
 import "./transactionList.css";
 
@@ -30,11 +33,13 @@ export default function TransactionList() {
   const history = useHistory();
   const { id } = useParams();
   const classes = useStyles();
-  const { shipments, isUpdating } = useSelector(shipmentSelector);
+  const { transactions, isLoading, totalTransactions } =
+    useSelector(statisticSelector);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    dispatch(getShipments());
-  }, [dispatch, isUpdating]);
+    dispatch(getTransactions({ page, limit: 10 }));
+  }, [dispatch, page]);
 
   return (
     <Box style={{ flex: 4 }} p={2}>
@@ -55,26 +60,29 @@ export default function TransactionList() {
             id ? history.push("/shipment") : history.push("/shipment/add");
           }}
         >
-          {id ? "Back To Shipments List" : "Report"}
+          {id ? "Back To transactions List" : "Report"}
         </Button>
       </Box>
       <Box my={2} mb={4}>
         {id ? (
-          <ShipmentForm />
+          <></>
         ) : (
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
+                  <TableCell style={{ fontWeight: 600 }} align="center">
+                    Avatar
+                  </TableCell>
                   <TableCell style={{ fontWeight: 600 }}>Shop's Name</TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
-                    Transaction's Name
+                    Date
                   </TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
                     Amount
                   </TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
-                    Date
+                    Service Fee
                   </TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
                     Status
@@ -85,40 +93,55 @@ export default function TransactionList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {true ? (
-                  <LoadingTable colsNumber={6} />
+                {isLoading ? (
+                  <LoadingTable colsNumber={7} />
                 ) : (
-                  shipments.map((row, index) => (
+                  transactions.map((row, index) => (
                     <TableRow key={index}>
-                      <TableCell>{row?.name ? row?.name : "xxx"}</TableCell>
                       <TableCell align="center">
-                        {row?.workingTime ? row?.workingTime : "..."}
+                        <Box display="flex" justifyContent="center">
+                          <Avatar src={row.shop.avatar} alt="" />
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        {row?.shop.name ? row?.shop.name : "xxx"}
+                      </TableCell>
+
+                      <TableCell align="center">
+                        {new Date(
+                          row?.transaction?.createdAt
+                        ).toLocaleDateString("en-us", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
                       </TableCell>
                       <TableCell align="center">
-                        {row?.fee ? row?.fee : "..."}
+                        ${row?.amount ? row?.amount : "..."}
                       </TableCell>
                       <TableCell align="center">
-                        {row?.maxOrderValue ? row?.maxOrderValue : "..."}
+                        ${(row?.amount * row?.serviceFeePercentage).toFixed(1)}
                       </TableCell>
                       <TableCell align="center">
-                        <Tooltip title="Edit">
+                        <Chip
+                          color="primary"
+                          label={row?.transaction.status}
+                          style={{
+                            letterSpacing: 1.2,
+                            fontSize: 14,
+                            backgroundColor: "#3bb077",
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <Tooltip title="View Detail">
                           <IconButton
                             aria-label="edit"
                             onClick={() => {
-                              history.push(`shipment/${row?.id}`);
+                              history.push(`/`);
                             }}
                           >
-                            <Edit />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Delete">
-                          <IconButton
-                            aria-label="delete"
-                            onClick={() => {
-                              dispatch(deleteShipment(row?.id));
-                            }}
-                          >
-                            <Delete />
+                            <ArrowForwardIcon />
                           </IconButton>
                         </Tooltip>
                       </TableCell>
@@ -130,6 +153,19 @@ export default function TransactionList() {
           </TableContainer>
         )}
       </Box>
+      {transactions?.length === 0 ? (
+        <></>
+      ) : (
+        <Box p={1} display="flex" justifyContent="center">
+          <Pagination
+            count={Math.ceil(totalTransactions / 10)}
+            page={page}
+            onChange={(event, value) => setPage(value)}
+            variant="outlined"
+            color="primary"
+          />
+        </Box>
+      )}
       <ToastContainer autoClose={2000} style={{ marginTop: "100px" }} />
     </Box>
   );

@@ -29,7 +29,7 @@ import {
 } from "date-fns";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getStatisticsUsers } from "redux/statisticRedux";
+import { getStatisticsUsers, getTransactions } from "redux/statisticRedux";
 import { getUsers } from "redux/userRedux";
 import Chart from "../../components/chart/Chart";
 import WidgetLg from "../../components/widgetLg/WidgetLg";
@@ -101,6 +101,9 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(getUsers({ page: 1, limit: 5 }));
+  }, [dispatch]);
+  useEffect(() => {
+    dispatch(getTransactions({ page: 1, limit: 5 }));
   }, [dispatch]);
   return (
     <div className="home">
