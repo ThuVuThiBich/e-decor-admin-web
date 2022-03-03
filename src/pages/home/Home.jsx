@@ -28,11 +28,10 @@ import {
   subYears,
 } from "date-fns";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { statisticSelector } from "redux/selectors";
+import { useDispatch } from "react-redux";
 import { getStatisticsUsers } from "redux/statisticRedux";
+import { getUsers } from "redux/userRedux";
 import Chart from "../../components/chart/Chart";
-import FeaturedInfo from "../../components/featuredInfo/FeaturedInfo";
 import WidgetLg from "../../components/widgetLg/WidgetLg";
 import WidgetSm from "../../components/widgetSm/WidgetSm";
 import "./home.css";
@@ -63,12 +62,9 @@ export default function Home() {
   const [userData, setUserData] = useState([]);
   const [date, setDate] = useState(new Date());
 
-  // setUserData([])
   const [view, setView] = useState("week");
   const [startDate, setStartDate] = useState(startOfISOWeek(new Date()));
   const [endDate, setEndDate] = useState(endOfISOWeek(new Date()));
-  const statisticStore = useSelector(statisticSelector);
-  console.log(statisticStore);
   useEffect(() => {
     if (view === "week") {
       setStartDate(startOfISOWeek(date));
@@ -91,7 +87,6 @@ export default function Home() {
         endDate: new Date(endDate).toISOString(),
       })
     ).then((data) => {
-      console.log(data);
       setUserData(
         view === "year"
           ? data.payload.map((item, index) => ({
@@ -101,14 +96,12 @@ export default function Home() {
           : data.payload
       );
     });
-    // dispatch(
-    //   getChart({
-    //     startDate: new Date(startDate).toISOString(),
-    //     endDate: new Date(endDate).toISOString(),
-    //   })
-    // );
-    // setUserData
+    dispatch(getUsers({ page: 1, limit: 5 }));
   }, [dispatch, endDate, startDate, view]);
+
+  useEffect(() => {
+    dispatch(getUsers({ page: 1, limit: 5 }));
+  }, [dispatch]);
   return (
     <div className="home">
       <Box
@@ -194,7 +187,6 @@ export default function Home() {
           Export
         </Button>
       </Box>
-      <FeaturedInfo />
       <Chart
         data={userData}
         title="User Analytics"

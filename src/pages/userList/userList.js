@@ -1,6 +1,8 @@
 import {
+  Avatar,
   Box,
   Button,
+  Chip,
   IconButton,
   Paper,
   Table,
@@ -12,31 +14,35 @@ import {
   Tooltip,
   Typography,
 } from "@material-ui/core";
-import { Add, Delete, Edit, Person } from "@material-ui/icons";
+import { Add, Delete, Person } from "@material-ui/icons";
+import LockIcon from "@material-ui/icons/Lock";
+import NoEncryptionIcon from "@material-ui/icons/NoEncryption";
+import { Pagination } from "@material-ui/lab";
 import { LoadingTable } from "components/Common/LoadingTable";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { ToastContainer } from "react-toastify";
-import { shipmentSelector } from "redux/selectors";
-import { deleteShipment, getShipments } from "redux/shipmentRedux";
-// import ShipmentForm from "./shipmentForm";
-import "./userList.css";
+import { userSelector } from "redux/selectors";
+import { deleteShipment } from "redux/shipmentRedux";
+import { getUsers, updateStatus } from "redux/userRedux";
 import { useStyles } from "./styles";
+import "./userList.css";
 
 export default function UserList() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { id } = useParams();
   const classes = useStyles();
-  const { shipments, isUpdating } = useSelector(shipmentSelector);
+  const [page, setPage] = useState(1);
+
+  const { users, isLoading, totalUsers } = useSelector(userSelector);
 
   useEffect(() => {
-    dispatch(getShipments());
-  }, [dispatch, isUpdating]);
+    dispatch(getUsers({ limit: 10, page }));
+  }, [dispatch, page]);
 
-  console.log(shipments);
   return (
     <Box style={{ flex: 4 }} p={2}>
       <Box
@@ -75,12 +81,10 @@ export default function UserList() {
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
+                  <TableCell style={{ fontWeight: 600 }}>Avatar</TableCell>
                   <TableCell style={{ fontWeight: 600 }}>User's Name</TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
                     Email
-                  </TableCell>
-                  <TableCell style={{ fontWeight: 600 }} align="center">
-                    Phone
                   </TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
                     Status
@@ -91,30 +95,51 @@ export default function UserList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {true ? (
+                {isLoading ? (
                   <LoadingTable colsNumber={5} />
                 ) : (
-                  shipments.map((row, index) => (
+                  users?.map((row, index) => (
                     <TableRow key={index}>
+                      <TableCell>
+                        <Avatar src={row.avatar} alt="" />
+                      </TableCell>
                       <TableCell>{row?.name ? row?.name : "xxx"}</TableCell>
                       <TableCell align="center">
-                        {row?.workingTime ? row?.workingTime : "..."}
+                        {row?.email ? row?.email : "..."}
                       </TableCell>
                       <TableCell align="center">
-                        {row?.fee ? row?.fee : "..."}
+                        <Chip
+                          color="primary"
+                          label={row?.isActive ? "Active" : "InActive"}
+                          style={{
+                            letterSpacing: 1.2,
+                            fontSize: 14,
+                            backgroundColor: row?.isActive
+                              ? "rgb(49 142 246)"
+                              : "rgb(244 45 45)",
+                          }}
+                        />
                       </TableCell>
                       <TableCell align="center">
-                        {row?.maxOrderValue ? row?.maxOrderValue : "..."}
-                      </TableCell>
-                      <TableCell align="center">
-                        <Tooltip title="Edit">
+                        <Tooltip title={row?.isActive ? "InActive" : "Active"}>
                           <IconButton
                             aria-label="edit"
                             onClick={() => {
-                              history.push(`/users/${row?.id}`);
+                              dispatch(
+                                updateStatus({
+                                  id: row?.id,
+                                  data: {
+                                    isActive: !row?.isActive,
+                                  },
+                                })
+                              );
                             }}
                           >
-                            <Edit />
+                            {row?.isActive ? (
+                              <LockIcon />
+                            ) : (
+                              <NoEncryptionIcon />
+                            )}
                           </IconButton>
                         </Tooltip>
                         <Tooltip title="Delete">
@@ -136,6 +161,19 @@ export default function UserList() {
           </TableContainer>
         )}
       </Box>
+      {users?.length === 0 ? (
+        <></>
+      ) : (
+        <Box p={1} display="flex" justifyContent="center">
+          <Pagination
+            count={Math.ceil(totalUsers / 10)}
+            page={page}
+            onChange={(event, value) => setPage(value)}
+            variant="outlined"
+            color="primary"
+          />
+        </Box>
+      )}
       <ToastContainer autoClose={2000} style={{ marginTop: "100px" }} />
     </Box>
   );

@@ -32,7 +32,6 @@ export default function ShipmentForm(props) {
   useEffect(() => {
     if (id !== "add") {
       const shipment = shipments.find((item) => +item.id === +id);
-      console.log(shipment);
       setName(shipment?.name);
       setDescription(shipment?.description);
       setFee(shipment?.fee);

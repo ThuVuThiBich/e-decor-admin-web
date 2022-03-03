@@ -1,25 +1,29 @@
 import "./widgetSm.css";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import { userSelector } from "redux/selectors";
+import { useSelector } from "react-redux";
+import { Avatar, Box } from "@material-ui/core";
 export default function WidgetSm() {
+  const { users } = useSelector(userSelector);
   return (
     <div className="widgetSm">
       <span className="widgetSmTitle">New Join Members</span>
       <ul className="widgetSmList">
-        <li className="widgetSmListItem">
-          <img
-            src="https://images.pexels.com/photos/3992656/pexels-photo-3992656.png?auto=compress&cs=tinysrgb&dpr=2&w=500"
-            alt=""
-            className="widgetSmImg"
-          />
-          <div className="widgetSmUser">
-            <span className="widgetSmUsername">Anna Keller</span>
-            {/* <span className="widgetSmUserTitle">Software Engineer</span> */}
-          </div>
-          <button className="widgetSmButton">
-            View
-            <ArrowForwardIcon className="widgetSmIcon" />
-          </button>
-        </li>
+        {users?.map((user, index) => (
+          <li className="widgetSmListItem" key={index}>
+            <Box display="flex">
+              <Avatar src={user.avatar} alt="" />
+              <div className="widgetSmUser">
+                <span className="widgetSmUsername">{user.name}</span>
+                <span className="widgetSmUserTitle">{user.email}</span>
+              </div>
+            </Box>
+            <button className="widgetSmButton">
+              View
+              <ArrowForwardIcon className="widgetSmIcon" />
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   );

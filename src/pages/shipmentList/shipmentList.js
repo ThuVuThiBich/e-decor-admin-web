@@ -36,7 +36,6 @@ export default function ShipmentList() {
     dispatch(getShipments());
   }, [dispatch, isUpdating]);
 
-  console.log(shipments);
   return (
     <Box style={{ flex: 4 }} p={2}>
       <Box

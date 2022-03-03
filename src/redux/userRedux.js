@@ -2,11 +2,22 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import userApi from "api/userApi";
 import { toast } from "react-toastify";
 
-export const getUsers = createAsyncThunk("user/getUsers", async () => {
-  const response = await userApi.getAll();
+export const getUsers = createAsyncThunk("user/getUsers", async (params) => {
+  const response = await userApi.getAll(params);
   if (response.result) return response.result;
   return [];
 });
+
+export const updateStatus = createAsyncThunk(
+  "user/updateStatus",
+  async (data, thunkAPI) => {
+    const response = await userApi.updateStatus(data.id, data.data);
+    if (response.result) {
+      toast.success("SUCCESS");
+      return data.id;
+    } else toast.error("ERROR");
+  }
+);
 
 export const deleteUser = createAsyncThunk(
   "user/delete",
@@ -18,14 +29,6 @@ export const deleteUser = createAsyncThunk(
     } else toast.error("ERROR");
   }
 );
-
-// export const deleteUser = createAsyncThunk(
-//   "user/delete",
-//   async (id, thunkAPI) => {
-//     const response = await userApi.get(id);
-//     return response.result;
-//   }
-// );
 
 export const getShops = createAsyncThunk("user/getShops", async () => {
   const response = await userApi.getShops();
@@ -40,7 +43,7 @@ const userSlice = createSlice({
     users: [],
     shops: [],
     currentPage: 1,
-    total: 0,
+    totalUsers: 0,
     isLoading: false,
     isUpdating: false,
     error: false,
@@ -56,7 +59,9 @@ const userSlice = createSlice({
     },
     [getUsers.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.users = action.payload;
+      state.users = action.payload.users;
+      state.currentPage = action.payload.currentPage;
+      state.totalUsers = action.payload.totalUsers;
     },
 
     [deleteUser.pending]: (state) => {
@@ -71,6 +76,21 @@ const userSlice = createSlice({
       state.users.splice(
         state.users.findIndex((item) => +item.id === +action.payload),
         1
+      );
+    },
+    [updateStatus.pending]: (state) => {
+      // state.isLoading = true;
+    },
+    [updateStatus.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    },
+    [updateStatus.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.users = state.users.map((user) =>
+        +user.id === +action.payload
+          ? { ...user, isActive: !user.isActive }
+          : user
       );
     },
 

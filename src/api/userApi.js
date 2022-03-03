@@ -1,9 +1,9 @@
 import axiosClient from "./axiosClient";
 
 const userApi = {
-  getAll: () => {
+  getAll: (params) => {
     const url = `/admin/users`;
-    return axiosClient.get(url);
+    return axiosClient.get(url, { params });
   },
 
   get: (id) => {
@@ -24,6 +24,10 @@ const userApi = {
   delete: (id) => {
     const url = `/admin/user/${id}`;
     return axiosClient.delete(url);
+  },
+  updateStatus: (id, data) => {
+    const url = `/admin/users/${id}/status`;
+    return axiosClient.patch(url, data);
   },
 
   // delete: (id) => {
