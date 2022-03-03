@@ -72,7 +72,7 @@ export default function UserList() {
           )}
         </Button>
       </Box>
-      <Box my={2} mb={4}>
+      <Box my={2} mb={2}>
         {id ? (
           // <ShipmentForm />
           <></>
@@ -81,7 +81,9 @@ export default function UserList() {
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell style={{ fontWeight: 600 }}>Avatar</TableCell>
+                  <TableCell style={{ fontWeight: 600 }} align="center">
+                    Avatar
+                  </TableCell>
                   <TableCell style={{ fontWeight: 600 }}>User's Name</TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
                     Email
@@ -100,8 +102,10 @@ export default function UserList() {
                 ) : (
                   users?.map((row, index) => (
                     <TableRow key={index}>
-                      <TableCell>
-                        <Avatar src={row.avatar} alt="" />
+                      <TableCell align="center">
+                        <Box display="flex" justifyContent="center">
+                          <Avatar src={row.avatar} alt="" />
+                        </Box>
                       </TableCell>
                       <TableCell>{row?.name ? row?.name : "xxx"}</TableCell>
                       <TableCell align="center">

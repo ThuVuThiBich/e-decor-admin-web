@@ -30,8 +30,8 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
-export const getShops = createAsyncThunk("user/getShops", async () => {
-  const response = await userApi.getShops();
+export const getShops = createAsyncThunk("user/getShops", async (params) => {
+  const response = await userApi.getShops(params);
   if (response.result) return response.result;
   return [];
 });
@@ -44,6 +44,7 @@ const userSlice = createSlice({
     shops: [],
     currentPage: 1,
     totalUsers: 0,
+    totalShops: 0,
     isLoading: false,
     isUpdating: false,
     error: false,
@@ -94,7 +95,6 @@ const userSlice = createSlice({
       );
     },
 
-    //
     [getShops.pending]: (state) => {
       state.isLoading = true;
     },
@@ -104,7 +104,9 @@ const userSlice = createSlice({
     },
     [getShops.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.users = action.payload;
+      state.shops = action.payload.shops;
+      state.totalShops = action.payload.totalShops;
+      state.currentPage = action.payload.currentPage;
     },
   },
 });

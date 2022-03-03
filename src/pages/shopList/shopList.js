@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   IconButton,
@@ -13,14 +14,16 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Add, Delete, Edit, Storefront } from "@material-ui/icons";
+import { Pagination } from "@material-ui/lab";
 import { LoadingTable } from "components/Common/LoadingTable";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { ToastContainer } from "react-toastify";
-import { shipmentSelector } from "redux/selectors";
-import { deleteShipment, getShipments } from "redux/shipmentRedux";
+import { userSelector } from "redux/selectors";
+import { deleteShipment } from "redux/shipmentRedux";
+import { getShops } from "redux/userRedux";
 // import ShipmentForm from "./shipmentForm";
 import "./shopList.css";
 import { useStyles } from "./styles";
@@ -30,11 +33,12 @@ export default function ShopList() {
   const history = useHistory();
   const { id } = useParams();
   const classes = useStyles();
-  const { shipments, isUpdating } = useSelector(shipmentSelector);
+  const { shops, isLoading, totalShops } = useSelector(userSelector);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    dispatch(getShipments());
-  }, [dispatch, isUpdating]);
+    dispatch(getShops({ limit: 10, page }));
+  }, [dispatch, page]);
 
   return (
     <Box style={{ flex: 4 }} p={2}>
@@ -65,7 +69,7 @@ export default function ShopList() {
           )}
         </Button>
       </Box>
-      <Box my={2} mb={4}>
+      <Box my={2} mb={2}>
         {id ? (
           // <ShipmentForm />
           <></>
@@ -74,15 +78,15 @@ export default function ShopList() {
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
+                  <TableCell style={{ fontWeight: 600 }} align="center">
+                    Avatar
+                  </TableCell>
                   <TableCell style={{ fontWeight: 600 }}>Shop's Name</TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
-                    Email
+                    Paypal Email
                   </TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
-                    Phone
-                  </TableCell>
-                  <TableCell style={{ fontWeight: 600 }} align="center">
-                    Status
+                    Owner's Name
                   </TableCell>
                   <TableCell style={{ fontWeight: 600 }} align="center">
                     Actions
@@ -90,20 +94,23 @@ export default function ShopList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {true ? (
+                {isLoading ? (
                   <LoadingTable colsNumber={5} />
                 ) : (
-                  shipments.map((row, index) => (
+                  shops?.map((row, index) => (
                     <TableRow key={index}>
+                      <TableCell align="center">
+                        <Box display="flex" justifyContent="center">
+                          <Avatar src={row.avatar} alt="" />
+                        </Box>
+                      </TableCell>
                       <TableCell>{row?.name ? row?.name : "xxx"}</TableCell>
+
                       <TableCell align="center">
-                        {row?.workingTime ? row?.workingTime : "..."}
+                        {row?.paypalMail ? row?.paypalMail : "..."}
                       </TableCell>
                       <TableCell align="center">
-                        {row?.fee ? row?.fee : "..."}
-                      </TableCell>
-                      <TableCell align="center">
-                        {row?.maxOrderValue ? row?.maxOrderValue : "..."}
+                        {row?.owner?.name ? row?.owner?.name : "..."}
                       </TableCell>
                       <TableCell align="center">
                         <Tooltip title="Edit">
@@ -135,6 +142,19 @@ export default function ShopList() {
           </TableContainer>
         )}
       </Box>
+      {shops?.length === 0 ? (
+        <></>
+      ) : (
+        <Box p={1} display="flex" justifyContent="center">
+          <Pagination
+            count={Math.ceil(totalShops / 10)}
+            page={page}
+            onChange={(event, value) => setPage(value)}
+            variant="outlined"
+            color="primary"
+          />
+        </Box>
+      )}
       <ToastContainer autoClose={2000} style={{ marginTop: "100px" }} />
     </Box>
   );

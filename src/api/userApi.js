@@ -36,9 +36,9 @@ const userApi = {
   // },
 
   //
-  getShops: () => {
-    const url = `/admin/shops`;
-    return axiosClient.get(url);
+  getShops: (params) => {
+    const url = "/shops";
+    return axiosClient.get(url, { params });
   },
 };
 
